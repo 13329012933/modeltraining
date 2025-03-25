@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cn.org.modeltraining.entity.ModelPicture;
 import com.cn.org.modeltraining.mapper.DemoMapper;
 import com.cn.org.modeltraining.service.IDemoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 /**
  * <p>
@@ -17,8 +17,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DemoServiceImpl extends ServiceImpl<DemoMapper, ModelPicture> implements IDemoService {
-
-    @Autowired
-    private DemoMapper demoMapper;
 
 }

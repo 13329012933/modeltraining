@@ -1,0 +1,58 @@
+server:
+  port: 18080
+  tomcat:
+    max-swallow-size: -1
+  error:
+    include-exception: true
+    include-stacktrace: ALWAYS
+    include-message: ALWAYS
+  servlet:
+    context-path: /modeltraining
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://localhost:3306/hfj?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456
+      initial-size: 5
+      max-active: 10
+      min-idle: 5
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #Oracle需要打开注释
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+file:
+  # 操作系统 windows lunix
+  osType: windows
+  # windows 存储路径 不同文件类型下级路径在CltTaskConstants中自行配置，json_document
+  localFileRootWindows: D:\\json_document
+  # lunix 存储路径 不同文件类型下级路径在CltTaskConstants中自行配置，json_document
+  localFileRootLunix: /opt/json_document

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鼠标点击获取坐标</title>
+    <style>
+        #image-container {
+            position: relative;
+            display: inline-block;
+        }
+        #image {
+            width: 600px; /* 设置图片大小 */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<h2>点击图片获取坐标</h2>
+<div id="image-container">
+    <img id="image" src="../pic/test.png" alt="点击图片">
+</div>
+
+<script>
+    document.getElementById("image").addEventListener("click", function(event) {
+        const image = event.target;
+        const rect = image.getBoundingClientRect();
+
+        // 计算相对图片左上角的坐标
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        console.log(`点击坐标: X=${x}, Y=${y}`);
+
+        // 组织 JSON 数据
+        const data = {
+            x: x,
+            y: y,
+            fileName : "test3333333"
+        };
+
+        // 发送数据到后端
+        fetch("http://localhost:18080/modeltraining/demo/training/test01", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log("后端返回:", result);
+            })
+            .catch(error => {
+                console.error("请求错误:", error);
+            });
+    });
+</script>
+</body>
+</html>

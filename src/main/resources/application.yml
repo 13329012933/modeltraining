@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: modeltraining-system
+  profiles:
+    active: 'dev'

@@ -35,10 +35,6 @@ public class DemoController {
 
     @RequestMapping("/test02")
     public Result<?> getPicList(@RequestBody JSONObject jsonObject){
-        String fileName = jsonObject.getString("fileName");
-        jsonObject.remove("fileName");
-        String jsonString = jsonObject.toJSONString();
-        String jsonPath = JsonToFile.toJsonFile(jsonString, fileDir, fileName);
-        return Result.ok("JSON文件生成成功，绝对路径： " + jsonPath);
+        return Result.ok();
     }
 }

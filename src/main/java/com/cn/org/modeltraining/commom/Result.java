@@ -6,10 +6,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- *   接口返回数据格式
- * @author scott
- * @email jeecgos@163.com
- * @date  2019年1月19日
+ *  @Description: 接口返回数据格式
+ *
  */
 @Data
 public class Result<T> implements Serializable {

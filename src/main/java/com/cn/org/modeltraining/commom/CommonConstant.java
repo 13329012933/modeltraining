@@ -2,7 +2,7 @@ package com.cn.org.modeltraining.commom;
 
 /**
  * @Description: 通用常量
- * @Author: wangg
+ *
  */
 public interface CommonConstant {
 

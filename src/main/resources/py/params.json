@@ -1,0 +1,22 @@
+{
+    "exp": "project1",
+    "max_iterations": 10000,
+    "batch_size": 1,
+    "labeled_bs": 1,
+    "base_lr": 0.001,
+    "deterministic": 1,
+    "seed": 1337,
+    "sliceseed": 0,
+    "gpu": "0,1,2,3",
+    "split": "train",
+    "num": 200,
+    "quality_bar": 0.98,
+    "ht": 0.9,
+    "st": 0.7,
+    "ema_decay": 0.99,
+    "slice_strategy": 64,
+    "consistency_type": "mse",
+    "consistency": 0.1,
+    "consistency_rampup": 40.0,
+    "init": 0
+}

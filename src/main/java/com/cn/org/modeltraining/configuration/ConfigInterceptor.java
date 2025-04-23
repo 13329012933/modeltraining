@@ -12,17 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ConfigInterceptor implements HandlerInterceptor {
 
     @Override
-        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-            if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
-                return true;
-            }else if (request.getMethod().equals(RequestMethod.POST.name())) {
-                return true;
-            }
-            if (request.getRequestURI().equals("/ppt/ppt/getPptData")) {
-                return true;
-            }
+        if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            return true;
+        }else if (request.getMethod().equals(RequestMethod.POST.name())) {
+            return true;
+        }
         return true;
     }
-
 }

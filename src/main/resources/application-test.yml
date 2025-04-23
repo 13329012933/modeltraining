@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9988
   tomcat:
     max-swallow-size: -1
   error:
@@ -17,7 +17,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://222.195.90.99:3406/wisdom-lion?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://localhost:3306/pic_model?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: abcd.1234
@@ -45,16 +45,30 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 file:
   # 操作系统 windows lunix
-  osType: windows
+  osType: lunix
   # windows 存储路径 不同文件类型下级路径在CltTaskConstants中自行配置，json_document
-  localFileRootWindows: D:\\json_document
+  localFileRootWindows: /opt/
   # lunix 存储路径 不同文件类型下级路径在CltTaskConstants中自行配置，json_document
   localFileRootLunix: /opt/json_document
-  picPathRootWindows: D:/HFCOMPANY/picPath/
-  picPathRootLunix: /filepath/allFilePath/
+  dirYPathRootWindows: /opt/data/train/y/
+  dirXPathRootWindows: /opt/data/train/x/
+  picPathRootWindows: /opt/pic/train/
+  pathRootWindows: /opt/
+  pathRootTest: /opt/
+  pathPy: /opt/py/
+
+minio:
+  minio_url: http://222.195.90.99:7009/
+  minio_name: admin
+  minio_pass: Qwe@24680
+  bucketName: otatest

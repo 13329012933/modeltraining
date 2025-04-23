@@ -47,6 +47,46 @@ public class FileManage implements Serializable {
     @TableField("file_address")
     private String fileAddress;
 
+    @TableField("minio_url")
+    private String minioUrl;
+
     @TableField("file_size")
     private BigDecimal fileSize;
+
+    @TableField("file_id")
+    private Integer fileId;
+
+    @TableField("npy_name")
+    private String npyName;
+
+    @TableField("dimension")
+    private String dimension;
+
+    @TableField("label_name")
+    private String labelName;
+
+    @TableField("start_num")
+    private Integer startNum;
+
+    @TableField("septal_num")
+    private Integer septalNum;
+
+    @TableField("status")
+    private Integer status;
+
+    @TableField("point_data")
+    private String pointData;
+
+    @TableField("project_name")
+    private String projectName;
+
+    @TableField("genera_path")
+    private String generaPath;
+
+    @TableField("source_path")
+    private String sourcePath;
+
+    @TableField("bz_status")
+    private Integer bzStatus;
+
 }

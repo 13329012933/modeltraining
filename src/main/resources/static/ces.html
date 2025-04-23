@@ -1,59 +1,163 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>鼠标点击获取坐标</title>
+    <title>模型训练平台</title>
     <style>
-        #image-container {
-            position: relative;
-            display: inline-block;
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
         }
-        #image {
-            width: 600px; /* 设置图片大小 */
-            height: auto;
+
+        .project-selector {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .project-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .log-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            height: 400px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+            color: #333;
+        }
+
+        button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1976D2;
+        }
+
+        button:disabled {
+            background-color: #9E9E9E;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-<h2>点击图片获取坐标</h2>
-<div id="image-container">
-    <img id="image" src="../pic/test.png" alt="点击图片">
+<h1>3D/2D模型训练平台</h1>
+
+<div class="project-selector">
+    <h3>请选择训练项目：</h3>
+    <div class="project-option">
+        <input type="radio" name="project" id="project1" value="project1">
+        <label for="project1">project1</label>
+    </div>
+    <div class="project-option">
+        <input type="radio" name="project" id="project2" value="project2">
+        <label for="project2">project2</label>
+    </div>
+    <div class="project-option">
+        <input type="radio" name="project" id="project3" value="project3">
+        <label for="project3">project3</label>
+    </div>
+</div>
+
+<button onclick="startTraining()" id="trainButton">启动训练</button>
+
+<div class="log-container">
+    <h3>训练日志：</h3>
+    <div id="trainingLogs"></div>
 </div>
 
 <script>
-    document.getElementById("image").addEventListener("click", function(event) {
-        const image = event.target;
-        const rect = image.getBoundingClientRect();
+    let socket = null;
+    let isTraining = false;
 
-        // 计算相对图片左上角的坐标
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+    function getSelectedProject() {
+        const selected = document.querySelector('input[name="project"]:checked');
+        return selected ? selected.value : null;
+    }
 
-        console.log(`点击坐标: X=${x}, Y=${y}`);
+    function addLog(message) {
+        const logContainer = document.getElementById('trainingLogs');
+        const logEntry = document.createElement('div');
+        logEntry.className = 'log-entry';
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
 
-        // 组织 JSON 数据
-        const data = {
-            x: x,
-            y: y,
-            fileName : "test3333333"
+    function startTraining() {
+        if (isTraining) {
+            alert('当前已有训练任务在进行中');
+            return;
+        }
+
+        const selectedProject = getSelectedProject();
+        if (!selectedProject) {
+            alert('请选择一个训练项目');
+            return;
+        }
+
+        isTraining = true;
+        document.getElementById('trainButton').disabled = true;
+        addLog('=== 训练任务初始化 ===');
+
+        // 创建WebSocket连接（根据实际地址修改）
+        socket = new WebSocket('ws://192.168.137.1:9988/modeltraining/ws/train');
+
+        socket.onopen = () => {
+            // 发送选中的项目名称（作为普通字符串，不是数组）
+            socket.send(selectedProject);
+            addLog('服务器连接成功，开始传输参数...');
         };
 
-        // 发送数据到后端
-        fetch("http://localhost:18080/modeltraining/demo/training/test01", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(result => {
-                console.log("后端返回:", result);
-            })
-            .catch(error => {
-                console.error("请求错误:", error);
-            });
+        socket.onmessage = (event) => {
+            addLog(event.data);
+
+            if (event.data.includes('训练完成') || event.data.includes('训练失败')) {
+                isTraining = false;
+                document.getElementById('trainButton').disabled = false;
+                socket.close();
+            }
+        };
+
+        socket.onerror = (error) => {
+            addLog(`连接错误: ${error.message}`);
+            isTraining = false;
+            document.getElementById('trainButton').disabled = false;
+        };
+
+        socket.onclose = () => {
+            addLog('连接已关闭');
+            isTraining = false;
+            document.getElementById('trainButton').disabled = false;
+        };
+    }
+
+    // 页面关闭前关闭连接
+    window.addEventListener('beforeunload', () => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+        }
     });
 </script>
 </body>
